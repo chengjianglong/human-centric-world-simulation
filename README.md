@@ -1,5 +1,14 @@
 # human-centric-world-simulation: digital humans learning to live in a 3D world
 
+<p align="center">
+  <img src="docs/media/world_cutaway.gif" width="760"
+       alt="Six photo-realistic digital humans moving through a cut-away house, its garden and a street with traffic">
+  <br>
+  <sub>Six learned walking policies share a house, a garden and a street with eight cars: they go through the doors and the
+  garden gate, cross at the zebra crossing, and the cars brake for them. Roof cut away; rendered in Blender (EEVEE).
+  <a href="docs/media/world_cutaway.mp4">Full video</a></sub>
+</p>
+
 Several digital humans share a 3D world built in Blender: a furnished house, its back garden,
 the front yard, and a street with moving cars, a zebra crossing and a bus stop. Their walking
 policies are trained in PyTorch with PPO across two GPUs. A *recursive self-improvement* loop
@@ -7,6 +16,18 @@ improves them generation by generation: population-based training, self-play aga
 policies, distillation of the best policies into new students, and an automatic curriculum.
 The learned trajectories go back into Blender, where photo-realistic Microsoft Rocketbox avatars
 walk them with motion-captured gaits. Results are rendered as videos or saved as `.blend` and `.bvh` files.
+
+## Demos
+All clips are rollouts from trained checkpoints (no scripted paths): every person picks its own next goal, plans a route
+and walks it; the motion-captured gait is time-scaled to the learned speed. Click a title for the full-length MP4.
+
+<p align="center">
+  <img src="docs/media/room.gif" width="480" alt="Three Rocketbox avatars walking between furniture in the living room">
+  <br><sub><b>Room mode</b>: photo-realistic Microsoft Rocketbox avatars, path-traced in Cycles.
+  <a href="docs/media/room_corner.mp4">Full video</a></sub>
+</p>
+
+Re-create all of these from your own checkpoints with `scripts/make_demo_media.sh` (about 45 min on 2× RTX A2000).
 
 There are two modes, each with its own spec and training config:
 
@@ -135,6 +156,20 @@ For photorealism indoors, pass a phone LiDAR scan of the real room via `render_r
 (Polycam, Scaniverse, etc., exported as `.glb` or `.obj` and aligned to the same origin). The scan replaces
 the procedural visuals while the measured `room.json` stays the physics.
 
+## Training results
+<p align="center"><img src="docs/media/training.png" width="860" alt="Training curves for room and world modes"></p>
+
+Best population member per generation, on the fixed-seed evaluation (`scripts/plot_training.py`). Each step-up of
+"people" or "cars" is the curriculum moving to a harder stage, which is why goals/min drops at those points in room mode.
+
+| Mode (generation) | People | Cars | Success | Goals / min | Collision rate | Car-hit rate | Jaywalk rate |
+|---|---|---|---|---|---|---|---|
+| World (38) | 6 | 8 | 100% | 5.5 | 1.2% | 0.02% | 2.6% |
+| Room (39) | 6 | – | 96% | 9.4 | 4.7% | – | – |
+
+Goals per minute are lower in the world because the goals are much farther apart (routes of 10–25 m through doors, the
+gate and the crossing, against 2–5 m inside the room).
+
 ## How it works
 **Environment (`roomsim/env.py`)**: B worlds × N humans are simulated together as tensors on the GPU.
 - **Bodies:** each human is a 0.25 m disc with unicycle dynamics (acceleration and turn-rate control, max 1.5 m/s).
@@ -197,7 +232,9 @@ configs/   room.json (the room), world.json (house + garden + street), default.y
 blender/   build_room.py, build_world.py, build_human.py, rocketbox.py, cars.py, render_rollout.py, common.py
 roomsim/   room_spec, world_spec, layout, nav, traffic, sensors, env, gait, skeleton, policy, ppo, pbt, selfplay, distill, export
 tests/     test_roomsim.py (room, PPO, PBT, export), test_world.py (routes, crossing, traffic, car hits, world export)
-train.py   evaluate.py   scripts/install_blender.sh, scripts/fetch_rocketbox.py
+scripts/   install_blender.sh, fetch_rocketbox.py, make_demo_media.sh (README media), plot_training.py
+docs/media/  demo GIFs, MP4s, stills and training curves shown in this README
+train.py   evaluate.py
 ```
 Not in git (see `.gitignore`): `tools/` (Blender), `.venv/`, `runs/` (checkpoints), `renders/`, and `assets/rocketbox/`.
 Re-create these with the quick-start commands.

@@ -5,3 +5,4 @@ renders/
 __pycache__/
 *.blend1
 assets/rocketbox/
+.claude/
