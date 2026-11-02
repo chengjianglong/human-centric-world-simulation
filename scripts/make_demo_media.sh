@@ -31,7 +31,7 @@ done
 $BL -b -P blender/render_rollout.py -- --rollout $TMP/world.npz --camera top --engine eevee --still 200 --out $TMP/top.mp4
 "$FF" -v error -y -i $TMP/top_f200.png -q:v 3 $OUT/world_top.jpg
 gif $TMP/cutaway.mp4 $OUT/world_cutaway.gif 7 10 720
-gif $TMP/street.mp4  $OUT/world_street.gif 11 8 480
+gif $TMP/street.mp4  $OUT/world_street.gif 10 8 480
 gif $TMP/garden.mp4  $OUT/world_garden.gif 2 8 480
 gif $TMP/aerial.mp4  $OUT/world_aerial.gif 8 8 480
 

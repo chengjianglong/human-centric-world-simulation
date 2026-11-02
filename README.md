@@ -21,10 +21,17 @@ walk them with motion-captured gaits. Results are rendered as videos or saved as
 All clips are rollouts from trained checkpoints (no scripted paths): every person picks its own next goal, plans a route
 and walks it; the motion-captured gait is time-scaled to the learned speed. Click a title for the full-length MP4.
 
+| [Street crossing](docs/media/world_street.mp4) | [Back garden](docs/media/world_garden.mp4) |
+|:---:|:---:|
+| <img src="docs/media/world_street.gif" width="400" alt="People crossing the street at the zebra crossing while cars yield"> | <img src="docs/media/world_garden.gif" width="400" alt="People walking around the patio, beds and shed in the back garden"> |
+| People use the zebra crossing; attentive drivers brake and wait (IDM car-following with pedestrian yielding). | Patio, vegetable and flower beds, bench and shed; the side gate links the garden to the street. |
+| [**Aerial view**](docs/media/world_aerial.mp4) | [**Room mode** (Cycles)](docs/media/room_corner.mp4) |
+| <img src="docs/media/world_aerial.gif" width="400" alt="Aerial view of the whole lot and street with traffic"> | <img src="docs/media/room.gif" width="400" alt="Three Rocketbox avatars walking between furniture in the living room"> |
+| The whole lot: house, fenced garden, front yard, sidewalks, two-lane street and bus stop. | The original living-room task with photo-realistic Microsoft Rocketbox avatars, path-traced in Cycles. |
+
 <p align="center">
-  <img src="docs/media/room.gif" width="480" alt="Three Rocketbox avatars walking between furniture in the living room">
-  <br><sub><b>Room mode</b>: photo-realistic Microsoft Rocketbox avatars, path-traced in Cycles.
-  <a href="docs/media/room_corner.mp4">Full video</a></sub>
+  <img src="docs/media/world_top.jpg" width="760" alt="Top-down orthographic map of the world">
+  <br><sub>Top-down map (<code>--camera top</code>): the house is cut open, the garden is to the north and the street to the south.</sub>
 </p>
 
 Re-create all of these from your own checkpoints with `scripts/make_demo_media.sh` (about 45 min on 2× RTX A2000).
