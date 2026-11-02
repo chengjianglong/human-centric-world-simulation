@@ -26,11 +26,20 @@ def rollout(net: ActorCritic, layout, n_agents, steps=600, seed=0, device="cuda"
             events.append((t + 1, n, "reached"))
         if (info["hit"] | info["agent_hit"])[0].any():
             events.append((t + 1, -1, "contact"))
+        for n in info["car_hit"][0].nonzero().flatten().tolist():
+            events.append((t + 1, n, "car_hit"))
     cat = lambda k: torch.stack([f[k][0] for f in frames]).cpu().numpy()  # noqa: E731
     pos, yaw, v, phase = cat("pos"), cat("yaw"), cat("v"), cat("phase")
     # smooth the gait phase/speed for animation (sim speed can change abruptly on contact)
     joints = gait.joint_angles(phase, v).astype(np.float32)
-    return dict(pos=pos.astype(np.float32), yaw=yaw.astype(np.float32), speed=v.astype(np.float32),
+    extra = dict(kind=np.array(layout.kind), bounds=np.array(layout.bounds or (0, 0, layout.width, layout.depth), dtype=np.float32))
+    if "car_pos" in frames[0]:
+        extra.update(car_pos=cat("car_pos").astype(np.float32), car_yaw=cat("car_yaw").astype(np.float32),
+                     car_speed=cat("car_v").astype(np.float32),
+                     car_size=np.array(layout.traffic["car_size"], dtype=np.float32),
+                     car_colors=np.array(layout.traffic.get("colors", [[0.5, 0.5, 0.5]]), dtype=np.float32),
+                     car_hits=np.array([e for e in events if e[2] == "car_hit"], dtype=object))
+    return dict(**extra,pos=pos.astype(np.float32), yaw=yaw.astype(np.float32), speed=v.astype(np.float32),
                 phase=phase.astype(np.float32), goal=cat("goal").astype(np.float32), goal_idx=cat("goal_idx"),
                 joints=joints, joint_names=np.array(gait.JOINTS), dt=np.float32(env.c["dt"]),
                 radius=np.float32(env.c["radius"]), poi_names=np.array(layout.poi_names),

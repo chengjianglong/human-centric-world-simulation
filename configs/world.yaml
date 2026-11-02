@@ -1,0 +1,58 @@
+# Human-centric world: house + back garden + front street with traffic. Training config.
+spec: configs/world.json        # the room (shared with Blender)
+gpus: [0, 1]                   # one worker process per GPU; population is split across them
+seed: 0
+
+population: 8                  # PBT members (4 per RTX A2000)
+generations: 80
+updates_per_generation: 40     # PPO updates per member per generation
+num_worlds: 1024               # parallel rooms per member during training
+
+env:
+  goal_timeout: 600             # 30 s: trips from the sofa to the bus stop are ~25 m
+  episode_len: 1500
+  poi_prob: 0.7
+#                        # overrides for roomsim.env.DEFAULTS (radius, speeds, rewards, ...)
+
+policy:
+  hidden: 256
+  layers: 3
+
+ppo:
+  lr: 3.0e-4
+  gamma: 0.99
+  lam: 0.95
+  clip: 0.2
+  ent_coef: 0.003
+  vf_coef: 0.5
+  epochs: 4
+  minibatches: 4
+  rollout_len: 64
+  max_grad_norm: 1.0
+  target_kl: 0.03
+  selfplay_frac: 0.5           # share of rooms where other humans are frozen opponents
+
+eval:
+  worlds: 64
+  steps: 1200                  # 45 s of simulated time, fixed seed per generation
+
+pbt:
+  exploit_frac: 0.25           # bottom 25% copy the top 25% ...
+  perturb: [0.8, 1.25]         # ... and perturb their hyper-parameters
+  width_choices: [128, 256, 384]
+  width_mutation_prob: 0.15    # occasionally change network width (via distillation)
+  archive_size: 8              # elite archive: opponents + distillation teachers
+  distill_every: 5             # every N generations the worst member is reborn as a
+  distill_teachers: 3          #   student distilled from the top-k elites
+  distill_steps: 300
+
+selfplay:
+  archive_prob: 0.5            # opponent drawn from archive (vs. current population)
+
+curriculum:                    # advance when the best member clears the threshold
+  threshold: {success: 0.85, collision_rate: 0.04, goals_per_min: 2.5, car_hit_rate: 0.001}
+  stages:                      # more people and more traffic, longer trips
+    - {n_agents: 2, n_cars: 2, goal_min_dist: 2.0}
+    - {n_agents: 3, n_cars: 4, goal_min_dist: 3.0}
+    - {n_agents: 4, n_cars: 6, goal_min_dist: 4.0}
+    - {n_agents: 6, n_cars: 8, goal_min_dist: 4.0}

@@ -1,12 +1,15 @@
 """Animate the learned trajectories in the Blender room and render a video.
 
     tools/blender/blender -b -P blender/render_rollout.py -- --rollout renders/rollout.npz \
-        [--out renders/rollout.mp4] [--camera corner|top|follow] [--engine eevee|cycles] \
+        [--out renders/rollout.mp4] [--camera corner|top|follow|aerial|cutaway|street|garden] [--engine eevee|cycles] \
         [--frames 300] [--res 1280x720] [--samples 32] [--still 120] [--room-scan scan.glb]
         [--humans rocketbox|mannequin] [--avatars Male_Adult_01 Female_Adult_04 ...]
 
 --humans rocketbox (default when assets/rocketbox exists) uses photo-realistic Microsoft Rocketbox
 avatars animated with mocap; use --engine cycles for realistic skin/hair.
+
+World rollouts (house + garden + street, from configs/world.json) open assets/world.blend and also
+animate the cars; the aerial/cutaway/street/garden cameras exist only there.
 
 Always also saves the animated scene as a .blend next to --out (open it in Blender to explore).
 """
@@ -57,7 +60,7 @@ def goal_markers(data, col, start):
             _fcurve(act, "location", k, frames, data["goal"][:, i, k], interp="CONSTANT")
 
 
-def follow_camera(scene, data, start, target, subtarget="spine"):
+def follow_camera(scene, data, start, target, subtarget="spine", back=1.6, height=1.75):
     from build_human import _fcurve
     cam = bpy.data.cameras.new("cam_follow")
     cam.lens = 18
@@ -67,16 +70,16 @@ def follow_camera(scene, data, start, target, subtarget="spine"):
     sm = np.stack([np.convolve(np.pad(pos[:, j], (k, k), mode="edge"), np.ones(2 * k + 1) / (2 * k + 1), "valid") for j in (0, 1)], -1)
     yaw = np.unwrap(data["yaw"][:, 0])
     yaw = np.convolve(np.pad(yaw, (k, k), mode="edge"), np.ones(2 * k + 1) / (2 * k + 1), "valid")
-    camxy = sm - 1.6 * np.stack([np.cos(yaw), np.sin(yaw)], -1)
-    W, D = data["room_wh"]
-    camxy = np.clip(camxy, 0.15, [W - 0.15, D - 0.15])
+    camxy = sm - back * np.stack([np.cos(yaw), np.sin(yaw)], -1)
+    x0, y0, x1, y1 = data["bounds"]
+    camxy = np.clip(camxy, [x0 + 0.15, y0 + 0.15], [x1 - 0.15, y1 - 0.15])
     frames = np.arange(len(pos), dtype=np.float32) + start
     co.animation_data_create()
     act = bpy.data.actions.new("cam_follow_motion")
     co.animation_data.action = act
     _fcurve(act, "location", 0, frames, camxy[:, 0])
     _fcurve(act, "location", 1, frames, camxy[:, 1])
-    _fcurve(act, "location", 2, frames, np.full(len(pos), 1.75))
+    _fcurve(act, "location", 2, frames, np.full(len(pos), height))
     tr = co.constraints.new("TRACK_TO")
     tr.target, tr.subtarget = target, subtarget
     tr.track_axis, tr.up_axis = "TRACK_NEGATIVE_Z", "UP_Y"
@@ -87,9 +90,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--rollout", required=True)
     ap.add_argument("--out")
-    ap.add_argument("--room", default=os.path.join(C.ASSETS, "room.blend"))
+    ap.add_argument("--room", help="scene .blend (default: assets/room.blend, or assets/world.blend for world rollouts)")
     ap.add_argument("--room-scan", help="optional .glb/.gltf/.obj scan of the real room to render instead of the procedural shell")
-    ap.add_argument("--camera", default="corner", choices=["corner", "top", "follow"])
+    ap.add_argument("--camera", choices=["corner", "top", "follow", "aerial", "cutaway", "street", "garden"],
+                    help="default: corner (room) / cutaway (world)")
     ap.add_argument("--engine", choices=["eevee", "cycles"], help="default: cycles for rocketbox, eevee for mannequin")
     ap.add_argument("--samples", type=int, default=32)
     ap.add_argument("--res", default="1280x720")
@@ -99,14 +103,19 @@ def main():
     ap.add_argument("--humans", choices=["rocketbox", "mannequin"])
     ap.add_argument("--avatars", nargs="*", help="Rocketbox avatar names (default: all downloaded, in order)")
     a = ap.parse_args(C.script_args())
+    data = dict(np.load(a.rollout, allow_pickle=True))
+    world = str(data.get("kind", "room")) == "world"
+    a.camera = a.camera or ("cutaway" if world else "corner")
+    if not world and a.camera in ("aerial", "cutaway", "street", "garden"):
+        raise SystemExit(f"--camera {a.camera} needs a world rollout (evaluate.py on a configs/world.json checkpoint)")
     out = a.out or os.path.splitext(a.rollout)[0] + f"_{a.camera}.mp4"
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
 
-    bpy.ops.wm.open_mainfile(filepath=a.room)
+    bpy.ops.wm.open_mainfile(filepath=a.room or os.path.join(C.ASSETS, "world.blend" if world else "room.blend"))
     scene = bpy.context.scene
-    data = dict(np.load(a.rollout, allow_pickle=True))
-    floor = bpy.data.objects["floor"]
-    data["room_wh"] = (floor.dimensions.x, floor.dimensions.y)
+    if "bounds" not in data:
+        floor = bpy.data.objects["floor"]
+        data["bounds"] = (0.0, 0.0, floor.dimensions.x, floor.dimensions.y)
     T, N = data["pos"].shape[:2]
     T = min(T, a.frames) if a.frames else T
 
@@ -144,22 +153,43 @@ def main():
             rigs.append(ao)
     print(f"[render] humans: {kind} x {N}")
     a.engine = a.engine or ("cycles" if kind == "rocketbox" else "eevee")
+    if "car_pos" in data:
+        from cars import animate_car, build_car
+        cars = C.get_collection("cars")
+        cols = data["car_colors"]
+        for i in range(data["car_pos"].shape[1]):
+            root, wheels, r = build_car(f"car{i}", tuple(cols[(i * 3) % len(cols)]), tuple(data["car_size"]), cars)
+            animate_car(root, wheels, r, data["car_pos"][:T, i], data["car_yaw"][:T, i])
+        print(f"[render] cars: {data['car_pos'].shape[1]}")
     if not a.no_goals:
         goal_markers({k: (v[:T] if k == "goal" else v) for k, v in data.items()}, C.get_collection("goals"), 1)
 
     res_x, res_y = (int(v) for v in a.res.lower().split("x"))
     scene.render.resolution_x, scene.render.resolution_y = res_x, res_y
+    def open_roof():
+        for name in ("ceiling", "ceiling_fixture"):
+            bpy.data.objects[name].hide_render = True
+        if "roof" in bpy.data.collections:
+            bpy.data.collections["roof"].hide_render = True
+
     if a.camera == "corner":
         scene.camera = bpy.data.objects["cam_corner"]
     elif a.camera == "top":
-        cam = bpy.data.objects["cam_top"]
-        W, D = data["room_wh"]
-        cam.data.ortho_scale = max(W, D * res_x / res_y) * 1.06
-        for name in ("ceiling", "ceiling_fixture"):
-            bpy.data.objects[name].hide_render = True
+        cam = bpy.data.objects["cam_world_top" if world else "cam_top"]
+        x0, y0, x1, y1 = data["bounds"]
+        cam.data.ortho_scale = max(x1 - x0, (y1 - y0) * res_x / res_y) * 1.04
+        open_roof()
         scene.camera = cam
+    elif a.camera == "follow":
+        if world:  # third-person from above the walls, roof off
+            open_roof()
+            scene.camera = follow_camera(scene, data, 1, rigs[0], follow_bone, back=3.2, height=4.2)
+        else:
+            scene.camera = follow_camera(scene, data, 1, rigs[0], follow_bone)
     else:
-        scene.camera = follow_camera(scene, data, 1, rigs[0], follow_bone)
+        if a.camera == "cutaway":
+            open_roof()
+        scene.camera = bpy.data.objects[f"cam_{a.camera}"]
 
     fps = int(round(1.0 / float(data["dt"])))
     scene.render.fps = fps

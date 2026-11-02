@@ -95,6 +95,16 @@ def build_openings(spec, col, mats):
             # sill board
             c, s = wall_box(spec, o["wall"], a - 0.05, b + 0.05, z0 - 0.03, z0, inset=-t, thick=t + 0.05)
             C.box(f"{o['name']}_sill", c, s, mats["trim"], collection=col)
+        elif room_spec.door_leaf(spec, o):  # swung open 90 deg (same footprint the physics uses)
+            lf = room_spec.door_leaf(spec, o)
+            h = lf["height"]
+            C.box(f"{o['name']}_leaf", (lf["cx"], lf["cy"], z0 + h / 2), (2 * lf["hx"], 2 * lf["hy"], h), mats["door"],
+                  collection=col, bevel=0.005)
+            # handle near the free edge, on both faces
+            n_far = (lf["length"] - 0.08) if lf["inward"] else -(t + lf["length"] - 0.08)
+            hx, hy = room_spec.wall_point(spec, o["wall"], lf["hinge_u"], n_far)
+            along_x = o["wall"] in ("south", "north")
+            C.box(f"{o['name']}_handle", (hx, hy, 1.0), (0.1, 0.03, 0.03) if along_x else (0.03, 0.1, 0.03), mats["metal"], collection=col)
         else:
             c, s = wall_box(spec, o["wall"], a + fw, b - fw, z0, z1 - fw)
             s = tuple(0.04 if x == t else x for x in s)
@@ -340,6 +350,7 @@ def build(spec):
     build_furniture(spec, furn, mats)
     build_lighting(spec, rig)
     build_cameras(spec, rig)
+    return mats
 
 
 def main():

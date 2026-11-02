@@ -40,7 +40,7 @@ def worker(gpu, cmd_q, res_q, cfg, run_dir):
         if msg is None:
             return
         gen, stage = msg["gen"], msg["stage"]
-        env_cfg = {**cfg.get("env", {}), "goal_min_dist": stage["goal_min_dist"]}
+        env_cfg = {**cfg.get("env", {}), **{k: v for k, v in stage.items() if k != "n_agents"}}
         for task in msg["tasks"]:
             t0 = time.time()
             mid = task["id"]
@@ -74,7 +74,7 @@ def worker(gpu, cmd_q, res_q, cfg, run_dir):
             path = os.path.join(run_dir, f"gen_{gen:03d}", f"member_{mid}.pt")
             os.makedirs(os.path.dirname(path), exist_ok=True)
             torch.save(net.checkpoint(opt=tr.opt.state_dict(), hp=hp, gen=gen, member=mid, metrics=metrics,
-                                      stage=msg["stage_idx"], env_cfg=env_cfg, n_agents=stage["n_agents"]), path)
+                                      stage=msg["stage_idx"], env_cfg=env_cfg, n_agents=stage["n_agents"], spec=cfg["spec"]), path)
             res_q.put(dict(id=mid, gpu=gpu, path=path, metrics=metrics, train=logs, extra=info,
                            seconds=time.time() - t0, mem_mb=torch.cuda.max_memory_allocated(dev) / 1e6))
             del env, tr, net, opp
@@ -188,12 +188,15 @@ def main():
                 tb.add_scalar(f"best/{k}", v, gen)
             tb.add_scalar("curriculum/stage", state["stage"], gen)
             tb.add_scalar("curriculum/n_agents", stage["n_agents"], gen)
+            if "n_cars" in stage:
+                tb.add_scalar("curriculum/n_cars", stage["n_cars"], gen)
 
             # ---- curriculum: harder room once the best member is good enough
             th = cfg["curriculum"]["threshold"]
             advanced = False
             if (bm["success"] >= th["success"] and bm["collision_rate"] <= th["collision_rate"]
-                    and bm["goals_per_min"] >= th.get("goals_per_min", 0.0) and state["stage"] < len(stages) - 1):
+                    and bm["goals_per_min"] >= th.get("goals_per_min", 0.0)
+                    and bm.get("car_hit_rate", 0.0) <= th.get("car_hit_rate", 1.0) and state["stage"] < len(stages) - 1):
                 state["stage"] += 1
                 advanced = True
 
@@ -214,7 +217,9 @@ def main():
                 f.write(json.dumps(line) + "\n")
             print(f"[gen {gen:03d}] {line['seconds']:6.1f}s stage={line['stage']} N={stage['n_agents']} "
                   f"best=m{best_id} score={bm['score']:.2f} success={bm['success']:.2f} goals/min={bm['goals_per_min']:.1f} "
-                  f"coll={bm['collision_rate']:.3f} | exploit {losers}<-{winners}"
+                  f"coll={bm['collision_rate']:.3f}"
+                  + (f" cars={stage.get('n_cars')} car_hit={bm['car_hit_rate']:.4f} jaywalk={bm['jaywalk_rate']:.3f}" if "car_hit_rate" in bm else "")
+                  + f" | exploit {losers}<-{winners}"
                   + (f" | distill m{distilled}" if distilled is not None else "") + (" | CURRICULUM UP" if advanced else ""),
                   flush=True)
             state.update(gen=gen + 1, members=members, archive=archive.to_list())

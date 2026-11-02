@@ -1,0 +1,694 @@
+{
+  "kind": "world",
+  "name": "house_garden_street",
+  "width": 14.0,
+  "depth": 27.5,
+  "height": 2.7,
+  "bounds": [
+    -4.0,
+    -15.5,
+    10.0,
+    12.0
+  ],
+  "colliders": [
+    {
+      "name": "wall_south_0",
+      "cx": 0.165,
+      "cy": -0.06,
+      "hx": 0.28500000000000003,
+      "hy": 0.06,
+      "theta": 0.0,
+      "height": 2.7
+    },
+    {
+      "name": "wall_south_1",
+      "cx": 3.2350000000000003,
+      "cy": -0.06,
+      "hx": 1.885,
+      "hy": 0.06,
+      "theta": 0.0,
+      "height": 2.7
+    },
+    {
+      "name": "wall_north_0",
+      "cx": 1.79,
+      "cy": 4.26,
+      "hx": 1.9100000000000001,
+      "hy": 0.06000000000000005,
+      "theta": 0.0,
+      "height": 2.7
+    },
+    {
+      "name": "wall_north_1",
+      "cx": 5.01,
+      "cy": 4.26,
+      "hx": 0.10999999999999988,
+      "hy": 0.06000000000000005,
+      "theta": 0.0,
+      "height": 2.7
+    },
+    {
+      "name": "wall_west_0",
+      "cx": -0.06,
+      "cy": 2.1,
+      "hx": 0.06,
+      "hy": 2.1,
+      "theta": 0.0,
+      "height": 2.7
+    },
+    {
+      "name": "wall_east_0",
+      "cx": 5.0600000000000005,
+      "cy": 2.1,
+      "hx": 0.06000000000000005,
+      "hy": 2.1,
+      "theta": 0.0,
+      "height": 2.7
+    },
+    {
+      "name": "door_leaf",
+      "cx": 0.52,
+      "cy": 0.4,
+      "hx": 0.02,
+      "hy": 0.4,
+      "theta": 0.0,
+      "height": 1.9999999999999998,
+      "length": 0.8,
+      "hinge_u": 0.52,
+      "inward": true
+    },
+    {
+      "name": "back_door_leaf",
+      "cx": 4.830000000000001,
+      "cy": 4.87,
+      "hx": 0.02,
+      "hy": 0.5500000000000003,
+      "theta": 0.0,
+      "height": 2.0500000000000003,
+      "length": 1.1000000000000005,
+      "hinge_u": 4.830000000000001,
+      "inward": false
+    },
+    {
+      "name": "sofa",
+      "cx": 2.5,
+      "cy": 3.72,
+      "hx": 1.1,
+      "hy": 0.45,
+      "theta": 0.0,
+      "height": 0.85
+    },
+    {
+      "name": "coffee_table",
+      "cx": 2.5,
+      "cy": 2.4,
+      "hx": 0.55,
+      "hy": 0.3,
+      "theta": 0.0,
+      "height": 0.42
+    },
+    {
+      "name": "tv_stand",
+      "cx": 2.7,
+      "cy": 0.3,
+      "hx": 0.8,
+      "hy": 0.2,
+      "theta": 3.141592653589793,
+      "height": 0.5
+    },
+    {
+      "name": "bookshelf",
+      "cx": 0.18,
+      "cy": 2.6,
+      "hx": 0.5,
+      "hy": 0.17,
+      "theta": 1.5707963267948966,
+      "height": 1.9
+    },
+    {
+      "name": "dining_table",
+      "cx": 4.2,
+      "cy": 1.2,
+      "hx": 0.6,
+      "hy": 0.4,
+      "theta": 0.0,
+      "height": 0.75
+    },
+    {
+      "name": "chair_s",
+      "cx": 4.2,
+      "cy": 0.45,
+      "hx": 0.225,
+      "hy": 0.25,
+      "theta": 3.141592653589793,
+      "height": 0.9
+    },
+    {
+      "name": "chair_n",
+      "cx": 4.2,
+      "cy": 1.95,
+      "hx": 0.225,
+      "hy": 0.25,
+      "theta": 0.0,
+      "height": 0.9
+    },
+    {
+      "name": "plant",
+      "cx": 4.72,
+      "cy": 2.75,
+      "hx": 0.25,
+      "hy": 0.25,
+      "theta": 0.0,
+      "height": 1.2
+    },
+    {
+      "name": "floor_lamp",
+      "cx": 0.35,
+      "cy": 3.85,
+      "hx": 0.175,
+      "hy": 0.175,
+      "theta": 0.0,
+      "height": 1.7
+    },
+    {
+      "name": "fence_west_0",
+      "cx": -4.0,
+      "cy": 7.0,
+      "hx": 5.0,
+      "hy": 0.04,
+      "theta": 1.5707963267948966,
+      "height": 1.8
+    },
+    {
+      "name": "fence_north_0",
+      "cx": 3.0,
+      "cy": 12.0,
+      "hx": 7.0,
+      "hy": 0.04,
+      "theta": 0.0,
+      "height": 1.8
+    },
+    {
+      "name": "fence_east_0",
+      "cx": 10.0,
+      "cy": 8.175,
+      "hx": 3.825,
+      "hy": 0.04,
+      "theta": 1.5707963267948966,
+      "height": 1.8
+    },
+    {
+      "name": "fence_side_w_0",
+      "cx": -3.5,
+      "cy": 2.0,
+      "hx": 0.5,
+      "hy": 0.04,
+      "theta": 0.0,
+      "height": 1.8
+    },
+    {
+      "name": "fence_side_w_1",
+      "cx": -0.96,
+      "cy": 2.0,
+      "hx": 0.8399999999999999,
+      "hy": 0.04,
+      "theta": 0.0,
+      "height": 1.8
+    },
+    {
+      "name": "fence_side_e_0",
+      "cx": 7.5600000000000005,
+      "cy": 4.35,
+      "hx": 2.44,
+      "hy": 0.04,
+      "theta": 0.0,
+      "height": 1.8
+    },
+    {
+      "name": "patio_table",
+      "cx": 3.0,
+      "cy": 5.95,
+      "hx": 0.5,
+      "hy": 0.5,
+      "theta": 0.0,
+      "height": 0.74
+    },
+    {
+      "name": "bbq",
+      "cx": 6.6,
+      "cy": 5.9,
+      "hx": 0.375,
+      "hy": 0.275,
+      "theta": 0.0,
+      "height": 1.05
+    },
+    {
+      "name": "tree_garden_w",
+      "cx": -2.2,
+      "cy": 7.4,
+      "hx": 0.225,
+      "hy": 0.225,
+      "theta": 0.0,
+      "height": 6.0
+    },
+    {
+      "name": "tree_garden_e",
+      "cx": 8.0,
+      "cy": 7.6,
+      "hx": 0.2,
+      "hy": 0.2,
+      "theta": 0.0,
+      "height": 5.0
+    },
+    {
+      "name": "vegetable_bed",
+      "cx": 0.6,
+      "cy": 9.6,
+      "hx": 1.3,
+      "hy": 0.55,
+      "theta": 0.0,
+      "height": 0.4
+    },
+    {
+      "name": "flower_bed",
+      "cx": 4.2,
+      "cy": 9.6,
+      "hx": 1.3,
+      "hy": 0.55,
+      "theta": 0.0,
+      "height": 0.4
+    },
+    {
+      "name": "garden_bench",
+      "cx": -2.6,
+      "cy": 11.2,
+      "hx": 0.8,
+      "hy": 0.3,
+      "theta": 0.0,
+      "height": 0.85
+    },
+    {
+      "name": "shed",
+      "cx": 8.4,
+      "cy": 10.6,
+      "hx": 1.2,
+      "hy": 1.1,
+      "theta": 0.0,
+      "height": 2.4
+    },
+    {
+      "name": "bins",
+      "cx": 9.2,
+      "cy": 3.2,
+      "hx": 0.35,
+      "hy": 0.7,
+      "theta": 0.0,
+      "height": 1.1
+    },
+    {
+      "name": "ac_unit",
+      "cx": 5.55,
+      "cy": 1.5,
+      "hx": 0.35,
+      "hy": 0.35,
+      "theta": 0.0,
+      "height": 0.8
+    },
+    {
+      "name": "shrub_1",
+      "cx": 2.6,
+      "cy": -0.6,
+      "hx": 0.45,
+      "hy": 0.4,
+      "theta": 0.0,
+      "height": 0.95
+    },
+    {
+      "name": "shrub_2",
+      "cx": 3.8,
+      "cy": -0.6,
+      "hx": 0.45,
+      "hy": 0.4,
+      "theta": 0.0,
+      "height": 0.9
+    },
+    {
+      "name": "shrub_3",
+      "cx": -0.9,
+      "cy": -0.7,
+      "hx": 0.45,
+      "hy": 0.45,
+      "theta": 0.0,
+      "height": 1.0
+    },
+    {
+      "name": "mailbox",
+      "cx": 2.1,
+      "cy": -3.6,
+      "hx": 0.125,
+      "hy": 0.225,
+      "theta": 0.0,
+      "height": 1.15
+    },
+    {
+      "name": "tree_front",
+      "cx": 6.6,
+      "cy": -2.0,
+      "hx": 0.21,
+      "hy": 0.21,
+      "theta": 0.0,
+      "height": 6.5
+    },
+    {
+      "name": "lamp_near_w",
+      "cx": -2.6,
+      "cy": -5.7,
+      "hx": 0.11,
+      "hy": 0.11,
+      "theta": 0.0,
+      "height": 5.2
+    },
+    {
+      "name": "lamp_near_e",
+      "cx": 7.8,
+      "cy": -5.7,
+      "hx": 0.11,
+      "hy": 0.11,
+      "theta": 0.0,
+      "height": 5.2
+    },
+    {
+      "name": "lamp_far",
+      "cx": -0.8,
+      "cy": -13.3,
+      "hx": 0.11,
+      "hy": 0.11,
+      "theta": 3.141592653589793,
+      "height": 5.2
+    },
+    {
+      "name": "bus_stop",
+      "cx": 6.5,
+      "cy": -14.9,
+      "hx": 1.5,
+      "hy": 0.55,
+      "theta": 3.141592653589793,
+      "height": 2.5
+    }
+  ],
+  "pois": [
+    {
+      "name": "sofa",
+      "x": 2.5,
+      "y": 2.9400000000000004
+    },
+    {
+      "name": "tv_stand",
+      "x": 2.7,
+      "y": 1.0
+    },
+    {
+      "name": "bookshelf",
+      "x": 0.8300000000000001,
+      "y": 2.6
+    },
+    {
+      "name": "door",
+      "x": 0.9,
+      "y": 0.6
+    },
+    {
+      "name": "back_door",
+      "x": 4.3,
+      "y": 3.6
+    },
+    {
+      "name": "reading_corner",
+      "x": 0.9,
+      "y": 3.4
+    },
+    {
+      "name": "east_window",
+      "x": 4.55,
+      "y": 3.2
+    },
+    {
+      "name": "dining_side",
+      "x": 3.33,
+      "y": 1.2
+    },
+    {
+      "name": "patio_table",
+      "x": 2.05,
+      "y": 5.95
+    },
+    {
+      "name": "bbq",
+      "x": 6.6,
+      "y": 5.2
+    },
+    {
+      "name": "vegetable_bed",
+      "x": 0.6,
+      "y": 8.75
+    },
+    {
+      "name": "garden_bench",
+      "x": -2.6,
+      "y": 10.399999999999999
+    },
+    {
+      "name": "shed",
+      "x": 8.4,
+      "y": 9.1
+    },
+    {
+      "name": "bins",
+      "x": 8.399999999999999,
+      "y": 3.2
+    },
+    {
+      "name": "mailbox",
+      "x": 2.1,
+      "y": -4.22
+    },
+    {
+      "name": "bus_stop",
+      "x": 6.5,
+      "y": -13.950000000000001
+    },
+    {
+      "name": "front_porch",
+      "x": 0.9,
+      "y": -1.1
+    },
+    {
+      "name": "front_lawn",
+      "x": 4.0,
+      "y": -2.4
+    },
+    {
+      "name": "sidewalk_west",
+      "x": -3.0,
+      "y": -5.0
+    },
+    {
+      "name": "sidewalk_east",
+      "x": 9.2,
+      "y": -5.0
+    },
+    {
+      "name": "far_sidewalk_west",
+      "x": -2.8,
+      "y": -14.3
+    },
+    {
+      "name": "garden_lawn",
+      "x": 2.4,
+      "y": 7.9
+    },
+    {
+      "name": "garden_corner",
+      "x": -3.1,
+      "y": 5.0
+    },
+    {
+      "name": "side_path_west",
+      "x": -2.4,
+      "y": 0.6
+    }
+  ],
+  "openings": [
+    {
+      "name": "door",
+      "type": "door",
+      "wall": "south",
+      "offset": 0.45,
+      "width": 0.9,
+      "height": 2.05,
+      "sill": 0.0,
+      "open": "in",
+      "hinge": "left"
+    },
+    {
+      "name": "back_door",
+      "type": "door",
+      "wall": "north",
+      "offset": 3.7,
+      "width": 1.2,
+      "height": 2.1,
+      "sill": 0.0,
+      "open": "out",
+      "hinge": "right"
+    },
+    {
+      "name": "window_n",
+      "type": "window",
+      "wall": "north",
+      "offset": 0.6,
+      "width": 1.8,
+      "height": 1.4,
+      "sill": 0.9
+    },
+    {
+      "name": "window_e",
+      "type": "window",
+      "wall": "east",
+      "offset": 2.6,
+      "width": 1.2,
+      "height": 1.3,
+      "sill": 0.95
+    }
+  ],
+  "gates": [
+    {
+      "name": "garden_gate",
+      "x": -2.4,
+      "y": 2.0,
+      "width": 1.2,
+      "theta": 0.0,
+      "fence": "fence_side_w"
+    }
+  ],
+  "indoor": [
+    [
+      0.0,
+      0.0,
+      5.0,
+      4.2
+    ]
+  ],
+  "road": [
+    [
+      -4.0,
+      -13.0,
+      10.0,
+      -6.0
+    ]
+  ],
+  "crosswalks": [
+    [
+      0.6,
+      -13.0,
+      3.4,
+      -6.0
+    ]
+  ],
+  "sidewalks": [
+    [
+      -45.0,
+      -6.0,
+      55.0,
+      -4.0
+    ],
+    [
+      -45.0,
+      -15.5,
+      55.0,
+      -13.0
+    ]
+  ],
+  "nav": {
+    "cell": 0.25,
+    "road_cost": 4.0
+  },
+  "traffic": {
+    "lanes": [
+      {
+        "name": "westbound",
+        "y": -7.75,
+        "dir": -1
+      },
+      {
+        "name": "eastbound",
+        "y": -11.25,
+        "dir": 1
+      }
+    ],
+    "x_range": [
+      -45.0,
+      55.0
+    ],
+    "car_size": [
+      4.5,
+      1.85,
+      1.45
+    ],
+    "speed": [
+      6.0,
+      12.0
+    ],
+    "accel": 1.8,
+    "comfort_decel": 3.0,
+    "max_decel": 8.0,
+    "headway": 1.2,
+    "min_gap": 2.0,
+    "ped_gap": 1.2,
+    "ped_lateral": 1.0,
+    "attentive_view": 35.0,
+    "distracted_view": 7.0,
+    "distracted_prob": 0.25,
+    "colors": [
+      [
+        0.55,
+        0.04,
+        0.04
+      ],
+      [
+        0.05,
+        0.12,
+        0.35
+      ],
+      [
+        0.85,
+        0.85,
+        0.86
+      ],
+      [
+        0.08,
+        0.08,
+        0.09
+      ],
+      [
+        0.45,
+        0.47,
+        0.5
+      ],
+      [
+        0.12,
+        0.3,
+        0.18
+      ],
+      [
+        0.8,
+        0.55,
+        0.1
+      ],
+      [
+        0.3,
+        0.33,
+        0.4
+      ]
+    ]
+  }
+}

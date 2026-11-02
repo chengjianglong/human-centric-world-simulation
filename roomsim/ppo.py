@@ -143,5 +143,6 @@ def score(m):
     """Single fitness number for population-based training.
 
     Collisions are weighted heavily (1% of steps in contact costs 0.8 goals/min) so selection
-    favours polite walkers over fast ones that brush past furniture and people."""
-    return m["goals_per_min"] * m["success"] - 80.0 * m["collision_rate"]
+    favours polite walkers over fast ones that brush past furniture and people. Being hit by a car
+    (world mode) costs far more on top: 0.1% of steps under a car = -0.3."""
+    return m["goals_per_min"] * m["success"] - 80.0 * m["collision_rate"] - 300.0 * m.get("car_hit_rate", 0.0)
