@@ -1,0 +1,14 @@
+# Reference environment. The repo's .venv was created with:
+#   python -m venv --system-site-packages .venv   (from a Python 3.10 env with torch 2.6.0+cu124)
+#   .venv/bin/pip install pyyaml tensorboard pytest numpy
+name: roomsim
+channels: [pytorch, nvidia, conda-forge]
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - torch==2.6.0 --index-url https://download.pytorch.org/whl/cu124
+      - numpy
+      - pyyaml
+      - tensorboard
+      - pytest

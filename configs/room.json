@@ -1,0 +1,59 @@
+{
+  "_doc": [
+    "Single source of truth for the room. Units: metres, degrees.",
+    "Coordinates: x runs along the 'south' wall (left->right), y runs into the room toward the 'north' wall, z is up.",
+    "The origin (0,0) is the inside south-west corner. Interior size = width x depth.",
+    "Openings: wall in {south,north,west,east}; offset = distance along the wall from its start corner",
+    "  (south/north start at x=0, west/east start at y=0) to the opening's left edge; sill = height of bottom edge.",
+    "Furniture: center = [x, y] of the footprint centre; size = [width, depth, height] in the piece's own frame;",
+    "  rot = rotation about z. rot=0 means the piece's FRONT faces -y (south). rot=90 -> faces +x, 180 -> +y, 270 -> -x.",
+    "  collide=false for things you can walk over (rugs). poi = optional [dx, dy] goal point in the piece's frame.",
+    "Replace these placeholder values with measurements of your real room."
+  ],
+  "name": "living_room",
+  "width": 5.0,
+  "depth": 4.2,
+  "height": 2.7,
+  "wall_thickness": 0.12,
+  "materials": {
+    "floor": {"type": "wood", "color": [0.42, 0.28, 0.16], "roughness": 0.45},
+    "walls": {"color": [0.86, 0.84, 0.80], "roughness": 0.9},
+    "ceiling": {"color": [0.93, 0.93, 0.92], "roughness": 0.95}
+  },
+  "openings": [
+    {"name": "door", "type": "door", "wall": "south", "offset": 0.45, "width": 0.9, "height": 2.05, "sill": 0.0},
+    {"name": "window_n", "type": "window", "wall": "north", "offset": 1.5, "width": 2.0, "height": 1.4, "sill": 0.9},
+    {"name": "window_e", "type": "window", "wall": "east", "offset": 2.6, "width": 1.2, "height": 1.3, "sill": 0.95}
+  ],
+  "furniture": [
+    {"name": "sofa", "type": "sofa", "center": [2.5, 3.72], "size": [2.2, 0.9, 0.85], "rot": 0,
+     "color": [0.25, 0.32, 0.38], "poi": [0, -0.78]},
+    {"name": "rug", "type": "rug", "center": [2.5, 2.5], "size": [2.6, 1.8, 0.012], "rot": 0,
+     "color": [0.62, 0.55, 0.47], "collide": false},
+    {"name": "coffee_table", "type": "table", "center": [2.5, 2.4], "size": [1.1, 0.6, 0.42], "rot": 0,
+     "color": [0.30, 0.20, 0.12]},
+    {"name": "tv_stand", "type": "tv_stand", "center": [2.7, 0.3], "size": [1.6, 0.4, 0.5], "rot": 180,
+     "color": [0.15, 0.15, 0.16], "poi": [0, -0.7]},
+    {"name": "bookshelf", "type": "bookshelf", "center": [0.18, 2.6], "size": [1.0, 0.34, 1.9], "rot": 90,
+     "color": [0.55, 0.40, 0.26], "poi": [0, -0.65]},
+    {"name": "dining_table", "type": "table", "center": [4.2, 1.2], "size": [1.2, 0.8, 0.75], "rot": 0,
+     "color": [0.48, 0.33, 0.20]},
+    {"name": "chair_s", "type": "chair", "center": [4.2, 0.45], "size": [0.45, 0.5, 0.9], "rot": 180,
+     "color": [0.48, 0.33, 0.20]},
+    {"name": "chair_n", "type": "chair", "center": [4.2, 1.95], "size": [0.45, 0.5, 0.9], "rot": 0,
+     "color": [0.48, 0.33, 0.20]},
+    {"name": "plant", "type": "plant", "center": [4.6, 3.8], "size": [0.5, 0.5, 1.2], "rot": 0,
+     "color": [0.20, 0.42, 0.18]},
+    {"name": "floor_lamp", "type": "lamp", "center": [0.35, 3.85], "size": [0.35, 0.35, 1.7], "rot": 0,
+     "color": [0.92, 0.88, 0.78]}
+  ],
+  "extra_pois": [
+    {"name": "reading_corner", "x": 0.9, "y": 3.4},
+    {"name": "east_window", "x": 4.55, "y": 3.2},
+    {"name": "dining_side", "x": 3.33, "y": 1.2}
+  ],
+  "lights": {
+    "sun_strength": 3.0, "sun_elevation_deg": 35, "sun_azimuth_deg": 200,
+    "ceiling_light_power": 120.0
+  }
+}
