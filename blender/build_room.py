@@ -3,7 +3,7 @@
     tools/blender/blender -b -P blender/build_room.py -- [--spec configs/room.json] [--out assets]
 
 Writes assets/room.blend, assets/room.glb and assets/room_layout.json (the colliders/POIs
-the PyTorch env uses -- computed by the same roomsim.room_spec code, so they match).
+the PyTorch env uses -- computed by the same worldsim.room_spec code, so they match).
 """
 import argparse
 import math
@@ -15,7 +15,7 @@ import bpy
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import common as C  # noqa: E402
-from roomsim import room_spec  # noqa: E402
+from worldsim import room_spec  # noqa: E402
 
 
 # ------------------------------------------------------------------ walls

@@ -11,7 +11,7 @@ World mode (layout.kind == "world") adds:
   * geodesic routing: progress is measured along the shortest walkable route (through doors,
     the garden gate, preferring the zebra crossing), and the observation includes a waypoint ~1 m
     ahead on that route;
-  * street traffic (roomsim.traffic): cars that yield -- mostly -- to people; being hit by a car is
+  * street traffic (worldsim.traffic): cars that yield -- mostly -- to people; being hit by a car is
     heavily penalised, and walking on the road outside the crossing costs a little every step.
 """
 import math

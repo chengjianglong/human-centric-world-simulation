@@ -8,7 +8,7 @@ generations: 60
 updates_per_generation: 40     # PPO updates per member per generation
 num_worlds: 1024               # parallel rooms per member during training
 
-env: {}                        # overrides for roomsim.env.DEFAULTS (radius, speeds, rewards, ...)
+env: {}                        # overrides for worldsim.env.DEFAULTS (radius, speeds, rewards, ...)
 
 policy:
   hidden: 256

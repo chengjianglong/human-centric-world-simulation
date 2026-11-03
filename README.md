@@ -48,7 +48,7 @@ configs/room.json ──┬─────────────────�
                     │
 configs/world.json ─┼──────────────────► blender/build_world.py ─► assets/world.blend  (visuals, world mode)
                     │
-                    └► roomsim/room_spec.py + world_spec.py ──► roomsim/env.py  (GPU physics, same colliders;
+                    └► worldsim/room_spec.py + world_spec.py ──► worldsim/env.py  (GPU physics, same colliders;
                                                                    nav.py routes, traffic.py cars)
                                                                          │
 train.py: PBT coordinator ── worker cuda:0 ──┐                           ▼
@@ -106,7 +106,7 @@ is the living room's inside south-west corner, the street is to the south (−y)
 - **Front**: path, porch step, shrubs, mailbox, a tree, and the sidewalk with street lamps.
 - **Street**: two 3.5 m lanes with centre and edge markings, a zebra crossing in front of the house with
   tactile paving, and the far sidewalk with a **bus stop**. Neighbouring houses and street trees form the backdrop.
-- **Cars** (`roomsim/traffic.py`):
+- **Cars** (`worldsim/traffic.py`):
   - They drive both lanes at 6–12 m/s, looping round off-screen. They follow each other using the
     Intelligent Driver Model and brake for people in or next to their lane ahead.
   - Braking is capped at 8 m/s², and a quarter of drivers are *distracted*: they only notice people
@@ -115,7 +115,7 @@ is the living room's inside south-west corner, the street is to the south (−y)
   garden bench, shed, bins, mailbox, bus stop, ...), or random reachable spots off the road.
 
 **What the humans get in the world:**
-- **Routes** (`roomsim/nav.py`):
+- **Routes** (`worldsim/nav.py`):
   - **Route distances:** the world is divided into 0.25 m cells. The shortest walkable path between every
     pair of cells is computed on the GPU at start-up (wavefront relaxation, ~3 s, ~130 MB).
   - **Crossing preference:** road cells outside the crossing count as 4× longer, so routes use the zebra
@@ -178,7 +178,7 @@ Goals per minute are lower in the world because the goals are much farther apart
 gate and the crossing, against 2–5 m inside the room).
 
 ## How it works
-**Environment (`roomsim/env.py`)**: B worlds × N humans are simulated together as tensors on the GPU.
+**Environment (`worldsim/env.py`)**: B worlds × N humans are simulated together as tensors on the GPU.
 - **Bodies:** each human is a 0.25 m disc with unicycle dynamics (acceleration and turn-rate control, max 1.5 m/s).
 - **Collisions:** contacts with rotated boxes (walls, furniture, fences, garden objects), other humans
   and cars are resolved every step. Cars are tested over their swept path, so a fast car can't pass through anyone.
@@ -237,8 +237,8 @@ spinning wheels), keyed from the rollout's car trajectories.
 ```
 configs/   room.json (the room), world.json (house + garden + street), default.yaml (room training), world.yaml (world training)
 blender/   build_room.py, build_world.py, build_human.py, rocketbox.py, cars.py, render_rollout.py, common.py
-roomsim/   room_spec, world_spec, layout, nav, traffic, sensors, env, gait, skeleton, policy, ppo, pbt, selfplay, distill, export
-tests/     test_roomsim.py (room, PPO, PBT, export), test_world.py (routes, crossing, traffic, car hits, world export)
+worldsim/  room_spec, world_spec, layout, nav, traffic, sensors, env, gait, skeleton, policy, ppo, pbt, selfplay, distill, export
+tests/     test_room.py (room, PPO, PBT, export), test_world.py (routes, crossing, traffic, car hits, world export)
 scripts/   install_blender.sh, fetch_rocketbox.py, make_demo_media.sh (README media), plot_training.py
 docs/media/  demo GIFs, MP4s, stills and training curves shown in this README
 train.py   evaluate.py

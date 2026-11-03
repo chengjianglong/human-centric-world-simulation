@@ -15,8 +15,8 @@ from mathutils import Matrix, Vector
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import common as C  # noqa: E402
-from roomsim import gait  # noqa: E402
-from roomsim.skeleton import BONE_DRIVE, BONES  # noqa: E402
+from worldsim import gait  # noqa: E402
+from worldsim.skeleton import BONE_DRIVE, BONES  # noqa: E402
 
 OUTFITS = [  # shirt, trousers, skin, shoes, hair
     ((0.55, 0.12, 0.10), (0.12, 0.14, 0.22), (0.80, 0.60, 0.48), (0.08, 0.06, 0.05), (0.10, 0.07, 0.05)),

@@ -26,11 +26,11 @@ def main():
     ap.add_argument("--device", default="cuda:0" if torch.cuda.is_available() else "cpu")
     a = ap.parse_args()
 
-    from roomsim.env import VecRoomEnv
-    from roomsim.export import rollout, save_npz, write_bvh
-    from roomsim.layout import load_layout
-    from roomsim.policy import ActorCritic
-    from roomsim.ppo import evaluate_policy
+    from worldsim.env import VecRoomEnv
+    from worldsim.export import rollout, save_npz, write_bvh
+    from worldsim.layout import load_layout
+    from worldsim.policy import ActorCritic
+    from worldsim.ppo import evaluate_policy
 
     ck = torch.load(a.ckpt, map_location=a.device, weights_only=False)
     net = ActorCritic.from_checkpoint(ck, a.device)

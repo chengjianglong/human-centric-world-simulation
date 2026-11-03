@@ -12,7 +12,7 @@ env:
   goal_timeout: 600             # 30 s: trips from the sofa to the bus stop are ~25 m
   episode_len: 1500
   poi_prob: 0.7
-#                        # overrides for roomsim.env.DEFAULTS (radius, speeds, rewards, ...)
+#                        # overrides for worldsim.env.DEFAULTS (radius, speeds, rewards, ...)
 
 policy:
   hidden: 256

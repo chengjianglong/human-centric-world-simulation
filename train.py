@@ -26,11 +26,11 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 def worker(gpu, cmd_q, res_q, cfg, run_dir):
     torch.backends.cuda.matmul.allow_tf32 = True
     torch.backends.cudnn.allow_tf32 = True
-    from roomsim.distill import distill
-    from roomsim.env import VecRoomEnv
-    from roomsim.layout import load_layout
-    from roomsim.policy import ActorCritic
-    from roomsim.ppo import DEFAULT_HP, PPOTrainer, evaluate_policy
+    from worldsim.distill import distill
+    from worldsim.env import VecRoomEnv
+    from worldsim.layout import load_layout
+    from worldsim.policy import ActorCritic
+    from worldsim.ppo import DEFAULT_HP, PPOTrainer, evaluate_policy
 
     dev = f"cuda:{gpu}"
     torch.cuda.set_device(dev)
@@ -103,8 +103,8 @@ def main():
     ap.add_argument("--name")
     args = ap.parse_args()
 
-    from roomsim import pbt
-    from roomsim.selfplay import Archive, choose_opponent
+    from worldsim import pbt
+    from worldsim.selfplay import Archive, choose_opponent
 
     if args.resume:
         run_dir = args.resume
@@ -125,7 +125,7 @@ def main():
                      members=[pbt.init_member(i, cfg["ppo"], cfg["policy"]["hidden"], rng0) for i in range(cfg["population"])])
 
     if args.resume:  # re-score stored elites with the current fitness function (it may have changed)
-        from roomsim.ppo import score
+        from worldsim.ppo import score
         for e in state["archive"] + ([state["best"]] if state["best"] else []):
             if os.path.exists(e["path"]):
                 e["score"] = score(torch.load(e["path"], map_location="cpu", weights_only=False)["metrics"])

@@ -4,11 +4,11 @@ import os
 import pytest
 import torch
 
-from roomsim import world_spec
-from roomsim.env import VecRoomEnv
-from roomsim.export import rollout
-from roomsim.layout import box_signed_distance, in_rects, load_layout
-from roomsim.policy import ActorCritic
+from worldsim import world_spec
+from worldsim.env import VecRoomEnv
+from worldsim.export import rollout
+from worldsim.layout import box_signed_distance, in_rects, load_layout
+from worldsim.policy import ActorCritic
 
 DEV = "cuda:0" if torch.cuda.is_available() else "cpu"
 SPEC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "configs", "world.json")

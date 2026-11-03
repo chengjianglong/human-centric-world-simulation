@@ -5,14 +5,14 @@ import numpy as np
 import pytest
 import torch
 
-from roomsim import gait, pbt, room_spec
-from roomsim.env import VecRoomEnv
-from roomsim.export import rollout, write_bvh
-from roomsim.layout import box_signed_distance, load_layout, push_out_of_boxes
-from roomsim.policy import ActorCritic
-from roomsim.ppo import PPOTrainer
-from roomsim.sensors import lidar
-from roomsim.selfplay import Archive, choose_opponent
+from worldsim import gait, pbt, room_spec
+from worldsim.env import VecRoomEnv
+from worldsim.export import rollout, write_bvh
+from worldsim.layout import box_signed_distance, load_layout, push_out_of_boxes
+from worldsim.policy import ActorCritic
+from worldsim.ppo import PPOTrainer
+from worldsim.sensors import lidar
+from worldsim.selfplay import Archive, choose_opponent
 
 DEV = "cuda:0" if torch.cuda.is_available() else "cpu"
 

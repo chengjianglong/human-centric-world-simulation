@@ -19,7 +19,7 @@ import bpy
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_room as R  # noqa: E402
 import common as C  # noqa: E402
-from roomsim import world_spec  # noqa: E402
+from worldsim import world_spec  # noqa: E402
 
 
 # ------------------------------------------------------------------ helpers
