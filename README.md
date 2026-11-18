@@ -1,4 +1,4 @@
-# human-centric-world-simulation: digital humans learning to live in a 3D world
+# HCWSim-V1: Digital Humans Learn to Live in a 3D World
 
 <p align="center">
   <img src="docs/media/world_cutaway.gif" width="760"
